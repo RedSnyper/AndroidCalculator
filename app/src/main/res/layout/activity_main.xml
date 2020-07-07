@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/black">
 
+
     <TextView
         android:id="@+id/expression"
         android:layout_width="match_parent"
@@ -11,7 +12,7 @@
         android:textSize="40sp"
         android:textColor="@android:color/white"
         android:gravity="end"
-
+        android:scrollbars = "vertical"
         android:ellipsize="start"
         android:singleLine="true"/>
 

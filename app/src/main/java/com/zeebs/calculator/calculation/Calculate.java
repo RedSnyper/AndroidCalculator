@@ -5,12 +5,13 @@ import java.util.Stack;
 
 public class Calculate {
 
-    public static Double result(List<String> infixToPostfix)
+    public static String result(List<String> infixToPostfix)
     {
         Stack<Double> operand = new Stack<>();
         Double operand1;
         Double operand2;
         Double result;
+        String resultString;
 
         for (int i = 0; i < infixToPostfix.size(); i++) {
             String getCurrentValue = (String) infixToPostfix.get(i);
@@ -52,7 +53,8 @@ public class Calculate {
         }
 
         result = operand.pop();
-        return result;
+        resultString =""+result;
+        return resultString;
     }
 
 }

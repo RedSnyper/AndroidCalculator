@@ -3,10 +3,19 @@ package com.zeebs.calculator;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.zeebs.calculator.calculation.Calculate;
+import com.zeebs.calculator.calculation.ExpressionParser;
+import com.zeebs.calculator.calculation.ExpressionSplitter;
+import com.zeebs.calculator.calculation.InfixToPostfix;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,9 +35,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         initalizeTextViews();
         eventHandler();
+
     }
 
 
@@ -54,9 +65,11 @@ public class MainActivity extends AppCompatActivity {
         this.tvDot = (TextView) findViewById(R.id.btnDot);
         this.tvOpenBracket = (TextView) findViewById(R.id.btnOpeningBracket);
         this.tvCloseBracket = (TextView) findViewById(R.id.btnClosingBracket);
-
-        this.tvResult = (TextView) findViewById(R.id.result);
         this.tvExpression = (TextView) findViewById(R.id.expression);
+        this.tvResult = (TextView) findViewById(R.id.result);
+
+
+
         this.tvEquals = (TextView) findViewById(R.id.btnEquals);
     }
 
@@ -398,7 +411,10 @@ public class MainActivity extends AppCompatActivity {
 
                 if(isValidExpression && !expression.isEmpty() && bracketOpenedCount==0)
                 {
-                    tvResult.setText(expression);
+
+
+                    tvResult.setText(getResult(tvExpression.getText().toString()));
+
 
                 }else if(expression.isEmpty()){
                     Toast.makeText(MainActivity.this,"Empty expression",Toast.LENGTH_SHORT).show();
@@ -409,6 +425,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
     }
 
 
@@ -500,6 +518,18 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return  false;
+    }
+
+    public String getResult(String expression)
+    {
+        System.out.println("expression");
+        List<String> list = new ArrayList<>();
+        list = ExpressionSplitter.splitExpression(expression);
+        list = ExpressionParser.expressionForComputer(list);    // makes the split expression into readable format
+        list = InfixToPostfix.infixToPostfix(list);
+        System.out.println(Calculate.result(list));
+        return Calculate.result(list);
+
     }
 
 }
