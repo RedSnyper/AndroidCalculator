@@ -3,7 +3,6 @@ package com.zeebs.calculator;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +18,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    protected TextView t; // for display
+    protected TextView r;   // for result
+
+    protected String result;
+
     private TextView tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv0, tvMul, tvAdd, tvSub, tvDiv, tvClear, tvOpenBracket, tvCloseBracket, tvDot, tvEquals;
 
     private boolean multiplyFlag;           // to not have **
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView tvBack;
     private int maxDotAllowed = 1;   // for cases like 5.5.5
     private int bracketOpenedCount = 0; // to display a toast if all open brackets are not closed
+    private boolean showResult = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +72,10 @@ public class MainActivity extends AppCompatActivity {
         this.tvCloseBracket = (TextView) findViewById(R.id.btnClosingBracket);
         this.tvExpression = (TextView) findViewById(R.id.expression);
         this.tvResult = (TextView) findViewById(R.id.result);
-
-
-
         this.tvEquals = (TextView) findViewById(R.id.btnEquals);
     }
+
+
 
     public void eventHandler() {
         /* ----------------------------------------  Numbers ----------------------------------------------- */
@@ -79,11 +83,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
-                    tvExpression.append("*");
+//                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
+//                    tvExpression.append("*");
 
                 tvExpression.append(tv0.getText().toString());
+                result = getResult(tvExpression.getText().toString());
+                tvResult.setText(result);
+                showResult= true;
                 allowOperatorUse = true;
+
 
             }
         });
@@ -92,11 +100,14 @@ public class MainActivity extends AppCompatActivity {
         tv1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
-                    tvExpression.append("*");
+//
+//                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
+//                    tvExpression.append("*");
 
                 tvExpression.append(tv1.getText().toString());
+                result = getResult(tvExpression.getText().toString());
+                tvResult.setText(result);
+                showResult= true;
                 allowOperatorUse = true;
             }
         });
@@ -108,10 +119,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
-                    tvExpression.append("*");
+//                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
+//                    tvExpression.append("*");
 
                 tvExpression.append(tv2.getText().toString());
+                result = getResult(tvExpression.getText().toString());
+                tvResult.setText(result);
+                showResult= true;
                 allowOperatorUse = true;
             }
         });
@@ -121,9 +135,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
-                    tvExpression.append("*");
+//                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
+//                    tvExpression.append("*");
                 tvExpression.append(tv3.getText().toString());
+                result = getResult(tvExpression.getText().toString());
+                tvResult.setText(result);
+                showResult= true;
                 allowOperatorUse = true;
             }
         });
@@ -136,6 +153,9 @@ public class MainActivity extends AppCompatActivity {
                 if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
                     tvExpression.append("*");
                 tvExpression.append(tv4.getText().toString());
+                result = getResult(tvExpression.getText().toString());
+                tvResult.setText(result);
+                showResult= true;
                 allowOperatorUse = true;
             }
         });
@@ -144,10 +164,13 @@ public class MainActivity extends AppCompatActivity {
         tv5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
-                    tvExpression.append("*");
+//
+//                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
+//                    tvExpression.append("*");
                 tvExpression.append(tv5.getText().toString());
+                result = getResult(tvExpression.getText().toString());
+                tvResult.setText(result);
+                showResult= true;
                 allowOperatorUse = true;
 
             }
@@ -158,9 +181,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
-                    tvExpression.append("*");
+//                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
+//                    tvExpression.append("*");
                 tvExpression.append(tv6.getText().toString());
+                result = getResult(tvExpression.getText().toString());
+                tvResult.setText(result);
+                showResult= true;
                 allowOperatorUse = true;
             }
         });
@@ -170,6 +196,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 tvExpression.append(tv7.getText().toString());
+                result = getResult(tvExpression.getText().toString());
+                tvResult.setText(result);
+                showResult= true;
                 allowOperatorUse = true;
             }
         });
@@ -179,9 +208,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
-                    tvExpression.append("*");
+//                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
+//                    tvExpression.append("*");
                 tvExpression.append(tv8.getText().toString());
+                result = getResult(tvExpression.getText().toString());
+                tvResult.setText(result);
+                showResult= true;
                 allowOperatorUse = true;
             }
         });
@@ -191,9 +223,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
-                    tvExpression.append("*");
+//                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
+//                    tvExpression.append("*");
                 tvExpression.append(tv9.getText().toString());
+                result = getResult(tvExpression.getText().toString());
+                tvResult.setText(result);
+                showResult= true;
                 allowOperatorUse = true;
             }
         });
@@ -369,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                resetDataMemberFlags();
+                resetAll();
             }
         });
 
@@ -379,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 String expression = tvExpression.getText().toString();
-                tvResult.setText("");
+               // tvResult.setText("");
                 System.out.println("value after removing " + expression);
                 if (!expression.isEmpty()) {
                     if (expression.charAt(expression.length() - 1) == ')') {
@@ -391,12 +426,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                     tvExpression.setText(expression.substring(0, expression.length() - 1));
                     if (tvExpression.getText().toString().isEmpty()) {
-                        resetDataMemberFlags();
+                        resetAll();
                     }
 
                 } else {
                     Toast.makeText(MainActivity.this, "Nothing to clear", Toast.LENGTH_SHORT).show();
-                    resetDataMemberFlags();
+                    resetAll();
                 }
             }
         });
@@ -413,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
                 {
 
 
-                    tvResult.setText(getResult(tvExpression.getText().toString()));
+                    tvResult.setText(result);
 
 
                 }else if(expression.isEmpty()){
@@ -465,7 +500,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void resetDataMemberFlags()
+    public void resetAll()
     {
         allowOperatorUse = false;
         bracketOpenedCount = 0;
@@ -475,6 +510,7 @@ public class MainActivity extends AppCompatActivity {
         allowCloseBracketUse = false;
         allowSubtraction = true;
         maxDotAllowed = 1;
+        showResult = false;
         tvResult.setText("");
     }
 
@@ -522,14 +558,21 @@ public class MainActivity extends AppCompatActivity {
 
     public String getResult(String expression)
     {
-        System.out.println("expression");
-        List<String> list = new ArrayList<>();
-        list = ExpressionSplitter.splitExpression(expression);
-        list = ExpressionParser.expressionForComputer(list);    // makes the split expression into readable format
-        list = InfixToPostfix.infixToPostfix(list);
-        System.out.println(Calculate.result(list));
-        return Calculate.result(list);
 
+        if(!showResult)
+        {
+         return "";
+        }else {
+            List<String> list;
+            list = ExpressionSplitter.splitExpression(expression);
+            list = ExpressionParser.expressionForComputer(list);    // makes the split expression into readable format
+            list = InfixToPostfix.infixToPostfix(list);
+            showResult= true;
+            this.result = Calculate.result(list);
+
+            return result.toString();
+        }
     }
+
 
 }

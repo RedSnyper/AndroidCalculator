@@ -43,7 +43,7 @@ public class ExpressionSplitter  //this class obj is passed in ExpressionParser 
                     // do nothing. Applicable for cases like (-(-(X......
                 }
 
-                else if (expression.charAt(i - 1) == '*' || expression.charAt(i - 1) == '(' || expression.charAt(i-1) =='/' ) //for cases like x * -y.yyy or x + (-x.yy+z)
+                else if (expression.charAt(i - 1) == '*' || expression.charAt(i - 1) == '(' || expression.charAt(i-1) =='/' || expression.charAt(i-1)=='+' ) //for cases like x * -y.yyy or x + (-x.yy+z)
                 {
                     negativeNumberAtMid = true;
                     negativeNumberAtMidAppend = negativeNumberAtMidAppend.concat("-");

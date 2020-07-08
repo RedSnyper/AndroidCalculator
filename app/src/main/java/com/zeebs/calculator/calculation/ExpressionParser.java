@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExpressionParser  //responsible for taking the split expression and parse it into computer readable format
-                                // e.g 4(20) is converted to 4*(20) and 4*-(20) to 4*-1*(20)
+        // e.g 4(20) is converted to 4*(20) and 4*-(20) to 4*-1*(20)
 
 {
 
@@ -41,18 +41,29 @@ public class ExpressionParser  //responsible for taking the split expression and
                     }
                     // this can never be null
 
-                }else{
+                }
+                else{
                     expressionForComputer.add("-1");
                     expressionForComputer.add("*");
                     continue;
                 }
 
+            }else if (valueAtCurrentLocation.equals((")")))
+            {
+                expressionForComputer.add(valueAtCurrentLocation);
+                if(i!=expression.size()-1)
+                {
+                    if(expression.get(i+1).matches("-?\\d+|-?\\d+\\.\\d+"))
+                    {
+                        expressionForComputer.add("*");
+                    }
+                }
             }
             else{
                 expressionForComputer.add(valueAtCurrentLocation);
             }
         }
-        //System.out.println("the value is " + expressionForComputer.toString());
+        System.out.println("the value is " + expressionForComputer.toString());
         return expressionForComputer;
     }
 
