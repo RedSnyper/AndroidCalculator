@@ -17,6 +17,7 @@ public class ExpressionSplitter  //this class obj is passed in ExpressionParser 
         boolean negativeNumberAtMid = false;
         boolean canAddAppendStringInArrayList = false;
 
+        try{
         for (int i = 0; i < expression.length(); i++) {
 
             charAtCurrentPosition = expression.charAt(i);
@@ -100,6 +101,10 @@ public class ExpressionSplitter  //this class obj is passed in ExpressionParser 
                 }
                 decimalAndRepeatingAppend = "";
             }
+        }
+        }catch (Exception e)
+        {
+            return null;
         }
             return splitExpression;
     }

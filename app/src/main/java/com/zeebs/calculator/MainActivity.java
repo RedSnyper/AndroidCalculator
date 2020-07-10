@@ -1,33 +1,34 @@
+
 package com.zeebs.calculator;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zeebs.calculator.calculation.Calculate;
 import com.zeebs.calculator.calculation.ExpressionParser;
 import com.zeebs.calculator.calculation.ExpressionSplitter;
 import com.zeebs.calculator.calculation.InfixToPostfix;
 
-import java.util.ArrayList;
+import java.text.DecimalFormat;
 import java.util.List;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.HapticFeedbackConstants;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    protected TextView t; // for display
-    protected TextView r;   // for result
+
 
     protected String result;
 
-    private TextView tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv0, tvMul, tvAdd, tvSub, tvDiv, tvClear, tvOpenBracket, tvCloseBracket, tvDot, tvEquals;
+    private Button tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv0, tvMul, tvAdd, tvSub, tvDiv, tvClear, tvOpenBracket, tvCloseBracket, tvDot, tvEquals;
 
     private boolean multiplyFlag;           // to not have **
     private boolean divideFlag;             // to not have //
-    private boolean allowOperatorUse; //flag for first time use which forbids the first input to be operators
+    private boolean allowOperatorUse =false; //flag for first time use which forbids the first input to be operators
     private boolean allowCloseBracketUse;
     private boolean allowSubtraction = true;       // for cases like -3 or (-3) in the beginning
     private boolean allowBracketOpenUse = true;
@@ -40,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         initalizeTextViews();
         eventHandler();
@@ -49,30 +49,40 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void initalizeTextViews() {
-        this.tv0 = (TextView) findViewById(R.id.btnZero);
-        this.tv1 = (TextView) findViewById(R.id.btnOne);
-        this.tv2 = (TextView) findViewById(R.id.btnTwo);
-        this.tv3 = (TextView) findViewById(R.id.btnThree);
-        this.tv4 = (TextView) findViewById(R.id.btnFour);
-        this.tv5 = (TextView) findViewById(R.id.btnFive);
-        this.tv6 = (TextView) findViewById(R.id.btnSix);
-        this.tv7 = (TextView) findViewById(R.id.btnSeven);
-        this.tv8 = (TextView) findViewById(R.id.btnEight);
-        this.tv9 = (TextView) findViewById(R.id.btnNine);
-        this.tvMul = (TextView) findViewById(R.id.btnMultiply);
-        this.tvAdd = (TextView) findViewById(R.id.btnAdd);
-        this.tvSub = (TextView) findViewById(R.id.btnMinus);
-        this.tvDiv = (TextView) findViewById(R.id.btnDivide);
-        this.tvClear = (TextView) findViewById(R.id.btnClear);
-        this.tvOpenBracket = (TextView) findViewById(R.id.btnOpeningBracket);
-        this.tvCloseBracket = (TextView) findViewById(R.id.btnClosingBracket);
+
+
+        this.tv0 =  findViewById(R.id.btnZero);
+        this.tv1 =  findViewById(R.id.btnOne);
+        this.tv2 =  findViewById(R.id.btnTwo);
+        this.tv3 =  findViewById(R.id.btnThree);
+        this.tv4 =  findViewById(R.id.btnFour);
+        this.tv5 =  findViewById(R.id.btnFive);
+        this.tv6 =  findViewById(R.id.btnSix);
+        this.tv7 =  findViewById(R.id.btnSeven);
+        this.tv8 =  findViewById(R.id.btnEight);
+        this.tv9 =  findViewById(R.id.btnNine);
+        this.tvMul =  findViewById(R.id.btnMultiply);
+        this.tvAdd = findViewById(R.id.btnAdd);
+        this.tvSub = findViewById(R.id.btnMinus);
+        this.tvDiv =  findViewById(R.id.btnDivide);
+        this.tvClear = findViewById(R.id.btnClear);
+        this.tvOpenBracket =  findViewById(R.id.btnOpeningBracket);
+        this.tvCloseBracket = findViewById(R.id.btnClosingBracket);
         this.tvBack = (ImageView) findViewById(R.id.btnBack);
-        this.tvDot = (TextView) findViewById(R.id.btnDot);
-        this.tvOpenBracket = (TextView) findViewById(R.id.btnOpeningBracket);
-        this.tvCloseBracket = (TextView) findViewById(R.id.btnClosingBracket);
+        this.tvDot = findViewById(R.id.btnDot);
+        this.tvOpenBracket =  findViewById(R.id.btnOpeningBracket);
+        this.tvCloseBracket =  findViewById(R.id.btnClosingBracket);
         this.tvExpression = (TextView) findViewById(R.id.expression);
         this.tvResult = (TextView) findViewById(R.id.result);
-        this.tvEquals = (TextView) findViewById(R.id.btnEquals);
+        this.tvEquals = findViewById(R.id.btnEquals);
+        tvBack.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                tvBack.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                resetAll();
+                return true;
+            }
+        });
     }
 
 
@@ -82,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         tv0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                tv0.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 //                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
 //                    tvExpression.append("*");
 
@@ -101,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //
+                tv1.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 //                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
 //                    tvExpression.append("*");
 
@@ -118,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
+                tv2.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 //                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
 //                    tvExpression.append("*");
 
@@ -134,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         tv3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                tv3.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 //                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
 //                    tvExpression.append("*");
                 tvExpression.append(tv3.getText().toString());
@@ -149,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
         tv4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                tv4.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
                     tvExpression.append("*");
                 tvExpression.append(tv4.getText().toString());
@@ -164,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         tv5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//
+                tv5.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 //                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
 //                    tvExpression.append("*");
                 tvExpression.append(tv5.getText().toString());
@@ -180,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         tv6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                tv6.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 //                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
 //                    tvExpression.append("*");
                 tvExpression.append(tv6.getText().toString());
@@ -195,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
         tv7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                tv7.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 tvExpression.append(tv7.getText().toString());
                 result = getResult(tvExpression.getText().toString());
                 tvResult.setText(result);
@@ -207,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         tv8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                tv8.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 //                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
 //                    tvExpression.append("*");
                 tvExpression.append(tv8.getText().toString());
@@ -222,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         tv9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                tv9.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 //                if(hasPrecedingCloseBracket(tvExpression.getText().toString()))  // makes (4+3)3 to (4+3*3
 //                    tvExpression.append("*");
                 tvExpression.append(tv9.getText().toString());
@@ -230,12 +242,14 @@ public class MainActivity extends AppCompatActivity {
                 tvResult.setText(result);
                 showResult= true;
                 allowOperatorUse = true;
+
             }
         });
 
         tvDot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                tvDot.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 if (!tvExpression.getText().toString().isEmpty()) {
                     if (Character.isDigit(tvExpression.getText().toString().charAt(tvExpression.length() - 1)) && maxDotAllowed == 1) {
                         tvExpression.append(tvDot.getText().toString());
@@ -262,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
         tvMul.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                tvMul.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 if (allowOperatorUse) {
                     multiplyFlag = true;                                                   // when set true expessions like 3*/3 || 3**3 are invalid
                     if (canAddConsecutiveOperators(tvExpression.getText().toString()))       //does not allow illegal expressions like 3 +- 3 but allows 3 * -3
@@ -279,8 +293,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         tvDiv.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
+                tvDiv.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 if (allowOperatorUse) {
                     divideFlag = true;
                     if (canAddConsecutiveOperators(tvExpression.getText().toString()) && allowOperatorUse) {
@@ -298,6 +314,7 @@ public class MainActivity extends AppCompatActivity {
         tvAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                tvAdd.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 if (allowOperatorUse) {
                     if (canAddConsecutiveOperators(tvExpression.getText().toString()) && allowOperatorUse) {
                         tvExpression.append(tvAdd.getText().toString());
@@ -313,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
         tvSub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                tvSub.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 if (allowSubtraction || tvExpression.getText().toString().isEmpty()) {
                     tvExpression.append(tvSub.getText().toString());
                     maxDotAllowed = 1;
@@ -333,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
         tvOpenBracket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                tvOpenBracket.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 //  allowOperatorUse = true;
                 boolean hasDigitPreceeding = false;
                 boolean hasClosingBracketPreceeding = false;
@@ -369,6 +387,7 @@ public class MainActivity extends AppCompatActivity {
         tvCloseBracket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                tvCloseBracket.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 if (allowCloseBracketUse && !tvExpression.getText().toString().isEmpty()) {
                     if ((tvExpression.getText().toString().charAt(tvExpression.length() - 1)) == '(')
                         Toast.makeText(MainActivity.this, "Insert Number first", Toast.LENGTH_SHORT).show();
@@ -403,6 +422,7 @@ public class MainActivity extends AppCompatActivity {
         tvClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                tvClear.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
                 resetAll();
             }
@@ -412,9 +432,9 @@ public class MainActivity extends AppCompatActivity {
         tvBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                tvBack.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 String expression = tvExpression.getText().toString();
-               // tvResult.setText("");
+                // tvResult.setText("");
                 System.out.println("value after removing " + expression);
                 if (!expression.isEmpty()) {
                     if (expression.charAt(expression.length() - 1) == ')') {
@@ -447,8 +467,8 @@ public class MainActivity extends AppCompatActivity {
                 if(isValidExpression && !expression.isEmpty() && bracketOpenedCount==0)
                 {
 
-
-                    tvResult.setText(result);
+                    tvExpression.setText(tvResult.getText().toString());
+                    resultLai();
 
 
                 }else if(expression.isEmpty()){
@@ -498,6 +518,20 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         }
+    }
+
+    public void resultLai()
+    {
+       // allowOperatorUse = false;
+        bracketOpenedCount = 0;
+        multiplyFlag = false;
+        divideFlag = false;
+
+        allowCloseBracketUse = false;
+        allowSubtraction = true;
+        maxDotAllowed = 1;
+        showResult = false;
+        tvResult.setText("");
     }
 
     public void resetAll()
@@ -561,7 +595,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(!showResult)
         {
-         return "";
+            return "";
         }else {
             List<String> list;
             list = ExpressionSplitter.splitExpression(expression);
@@ -569,8 +603,7 @@ public class MainActivity extends AppCompatActivity {
             list = InfixToPostfix.infixToPostfix(list);
             showResult= true;
             this.result = Calculate.result(list);
-
-            return result.toString();
+            return result;
         }
     }
 

@@ -27,47 +27,48 @@ public class InfixToPostfix {
         Stack<String> operatorStack = new Stack<>();         // for adding numbers in the stack
         String value;
 
-        for (int i = 0; i < expressionForComputer.size(); i++) {
-            value = (String) expressionForComputer.get(i);
+        try {
+            for (int i = 0; i < expressionForComputer.size(); i++) {
+                value = (String) expressionForComputer.get(i);
 
 
-            if (value.matches("-?\\d+|-?\\d+\\.\\d+")) //matches positive numbers or -x....
-            {
-                infixToPostfix.add(value);
-            }
-            else if (value.equals("(")) {
-                operatorStack.push(value);
-            }
-            else if (value.equals(")")) // pops up all operators in the stack till ( is not reached
-            {
-                while (! operatorStack.isEmpty() && ! operatorStack.peek().equals("(")) {
-                    infixToPostfix.add(operatorStack.pop());
-                }
-                if (! operatorStack.isEmpty() && ! operatorStack.peek().equals("(")) //--------handle an exception here!!---------//
+                if (value.matches("-?\\d+|-?\\d+\\.\\d+")) //matches positive numbers or -x....
                 {
-                    System.out.println("error in the stack. Type mismatch maybe here 1");
-                    // return null;
-                }
-                else
-                    operatorStack.pop();
-            }
-            else {
-                while (!operatorStack.isEmpty() && precedence(value) <= precedence(operatorStack.peek())) {
-                    if (operatorStack.peek().equals("(")) // for cases with mismatch in bracket numbers
-                    {
-                        System.out.println("error in the stack. Type mismatch maybe here 2");
-                        //   return null;
+                    infixToPostfix.add(value);
+                } else if (value.equals("(")) {
+                    operatorStack.push(value);
+                } else if (value.equals(")")) // pops up all operators in the stack till ( is not reached
+                {
+                    while (!operatorStack.isEmpty() && !operatorStack.peek().equals("(")) {
+                        infixToPostfix.add(operatorStack.pop());
                     }
-                    infixToPostfix.add(operatorStack.pop());
-                }
-                operatorStack.push(value);
-            }
+                    if (!operatorStack.isEmpty() && !operatorStack.peek().equals("(")) //--------handle an exception here!!---------//
+                    {
 
+                         return null;
+                    } else
+                        operatorStack.pop();
+                } else {
+                    while (!operatorStack.isEmpty() && precedence(value) <= precedence(operatorStack.peek())) {
+                        if (operatorStack.peek().equals("(")) // for cases with mismatch in bracket numbers
+                        {
+
+                            return null;
+                        }
+                        infixToPostfix.add(operatorStack.pop());
+                    }
+                    operatorStack.push(value);
+                }
+
+            }
+            while (!operatorStack.isEmpty()) {
+                infixToPostfix.add(operatorStack.pop());
+            }
+        }catch (Exception e)
+        {
+            return null;
         }
-        while (! operatorStack.isEmpty()) {
-            infixToPostfix.add(operatorStack.pop());
-        }
-        System.out.println("infix to postifx" + infixToPostfix.toString());
+
         return infixToPostfix;
     }
 

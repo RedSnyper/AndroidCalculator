@@ -8,12 +8,16 @@
     <TextView
         android:id="@+id/expression"
         android:layout_width="match_parent"
-        android:layout_height="180sp"
-        android:textSize="40sp"
+        android:layout_height="150sp"
+        android:textSize="60sp"
         android:textColor="@android:color/white"
         android:gravity="end"
         android:scrollbars = "vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:inputType="number"
         android:ellipsize="start"
+        android:cursorVisible="true"
+        android:textCursorDrawable="@android:color/white"
         android:singleLine="true"/>
 
 
@@ -23,33 +27,11 @@
         android:layout_height="100sp"
         android:textColor="@android:color/white"
         android:gravity="end"
-        android:textSize="40sp"
+        android:textSize="30sp"
+
         android:ellipsize="end"
         android:singleLine="true"/>
 
-    <!--    <Button-->
-    <!--        android:id="@+id/expression"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="80sp"-->
-    <!--        android:textColor="@color/numberActionButton"-->
-    <!--        android:gravity="end"-->
-    <!--        android:maxLength="1"-->
-    <!--        android:layout_weight="1"-->
-    <!--        android:background="@color/numberActionButton"-->
-    <!--        android:textSize="21sp"-->
-
-    <!--        android:text="Button" />-->
-    <!--    <Button-->
-    <!--        android:id="@+id/result"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="80sp"-->
-    <!--        android:textColor="@color/numberActionButton"-->
-    <!--        android:gravity="end"-->
-    <!--        android:maxLength="1"-->
-    <!--        android:layout_weight="1"-->
-    <!--        android:background="@color/numberActionButton"-->
-    <!--        android:textSize="21sp"-->
-    <!--        android:text="Button" />-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -60,22 +42,23 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <TextView
+            <Button
                 android:id="@+id/btnClear"
                 style="@style/actionButtonStyle"
                 android:hapticFeedbackEnabled="true"
                 android:text="C" />
-            <TextView
+            <Button
                 android:id="@+id/btnOpeningBracket"
                 style="@style/actionButtonStyle"
                 android:text="(" />
-            <TextView
+            <Button
                 android:id="@+id/btnClosingBracket"
                 style="@style/actionButtonStyle"
                 android:text=")" />
-            <TextView
+            <Button
                 android:id="@+id/btnDivide"
                 style="@style/actionButtonStyle"
+                android:textSize="30dp"
                 android:text="/" />
         </LinearLayout>
 
@@ -85,19 +68,21 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
-            <TextView
+            <Button
                 android:id="@+id/btnSeven"
                 style="@style/numberButtonStyle"
                 android:text="7" />
-            <TextView
+            <Button
                 android:id="@+id/btnEight"
                 style="@style/numberButtonStyle"
+
                 android:text="8" />
-            <TextView
+            <Button
                 android:id="@+id/btnNine"
                 style="@style/numberButtonStyle"
+
                 android:text="9" />
-            <TextView
+            <Button
                 android:id="@+id/btnMultiply"
                 style="@style/actionButtonStyle"
                 android:text="*" />
@@ -111,19 +96,19 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
-            <TextView
+            <Button
                 android:id="@+id/btnFour"
                 style="@style/numberButtonStyle"
                 android:text="4" />
-            <TextView
+            <Button
                 android:id="@+id/btnFive"
                 style="@style/numberButtonStyle"
                 android:text="5" />
-            <TextView
+            <Button
                 android:id="@+id/btnSix"
                 style="@style/numberButtonStyle"
                 android:text="6" />
-            <TextView
+            <Button
                 android:id="@+id/btnAdd"
                 style="@style/actionButtonStyle"
                 android:text="+" />
@@ -136,19 +121,22 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
-            <TextView
+            <Button
                 android:id="@+id/btnOne"
                 style="@style/numberButtonStyle"
+
                 android:text="1" />
-            <TextView
+            <Button
                 android:id="@+id/btnTwo"
                 style="@style/numberButtonStyle"
+
                 android:text="2" />
-            <TextView
+            <Button
                 android:id="@+id/btnThree"
                 style="@style/numberButtonStyle"
+
                 android:text="3" />
-            <TextView
+            <Button
                 android:id="@+id/btnMinus"
                 style="@style/actionButtonStyle"
                 android:text="-" />
@@ -162,23 +150,25 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
-            <TextView
+            <Button
                 android:id="@+id/btnDot"
                 style="@style/numberButtonStyle"
+                android:textSize="30dp"
                 android:text="." />
-            <TextView
+            <Button
                 android:id="@+id/btnZero"
                 style="@style/numberButtonStyle"
+
                 android:text="0" />
             <ImageView
                 android:id="@+id/btnBack"
                 style="@style/numberButtonStyle"
-                android:src="@drawable/finalbackspace"
+                android:src="@drawable/ic_backspace_key_1594211677"
+                android:hapticFeedbackEnabled="true"
+                android:scaleType="center">
+            </ImageView>
 
-                android:scaleType="center"></ImageView>
-            "
-            android:hapticFeedbackEnabled="true"/>
-            <TextView
+            <Button
                 android:id="@+id/btnEquals"
                 style="@style/actionButtonStyle"
                 android:hapticFeedbackEnabled="true"
