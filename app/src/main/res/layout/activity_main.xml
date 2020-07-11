@@ -8,12 +8,11 @@
     <TextView
         android:id="@+id/expression"
         android:layout_width="match_parent"
-        android:layout_height="150sp"
+        android:layout_height="120sp"
         android:textSize="60sp"
         android:textColor="@android:color/white"
         android:gravity="end"
-        android:scrollbars = "vertical"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollHorizontally="true"
         android:inputType="number"
         android:ellipsize="start"
         android:cursorVisible="true"
@@ -24,7 +23,7 @@
     <TextView
         android:id="@+id/result"
         android:layout_width="match_parent"
-        android:layout_height="100sp"
+        android:layout_height="80sp"
         android:textColor="@android:color/white"
         android:gravity="end"
         android:textSize="30sp"
@@ -32,36 +31,170 @@
         android:ellipsize="end"
         android:singleLine="true"/>
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:outlineAmbientShadowColor="@color/rightSideButtons"
+            android:outlineSpotShadowColor="@color/rightSideButtons"
+            android:background="@color/rightSideButtons">
 
             <Button
-                android:id="@+id/btnClear"
+                android:id="@+id/btnDEGRAD"
                 style="@style/actionButtonStyle"
-                android:hapticFeedbackEnabled="true"
-                android:text="C" />
+                android:background="@color/rightSideButtons"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                android:textSize="18sp"
+                android:text="DEG\nRAD" />
+            <Button
+                android:id="@+id/btnSin"
+                style="@style/actionButtonStyle"
+                android:background="@color/rightSideButtons"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:text="sin\nasin" />
+            <Button
+                android:id="@+id/btnCos"
+                style="@style/actionButtonStyle"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:text="cos\nacos"
+                android:background="@color/rightSideButtons"
+                />
+            <Button
+                android:id="@+id/btnTan"
+                style="@style/actionButtonStyle"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                android:background="@color/rightSideButtons"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:text="tan\natan" />
+            <Button
+                android:id="@+id/btnCbrt"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                style="@style/actionButtonStyle"
+                android:background="@color/rightSideButtons"
+                android:text="" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:outlineAmbientShadowColor="@color/rightSideButtons"
+            android:outlineSpotShadowColor="@color/rightSideButtons"
+            android:background="@color/rightSideButtons">
+            <Button
+                android:id="@+id/btnPi"
+                style="@style/actionButtonStyle"
+                android:background="@color/rightSideButtons"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                android:textAllCaps="false"
+                android:text="\u03c0" />
+
+            <Button
+                android:id="@+id/btnExponent"
+                style="@style/actionButtonStyle"
+                android:background="@color/rightSideButtons"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                android:textSize="30dp"
+                android:textAllCaps="false"
+                android:text="e" />
+            <Button
+                android:id="@+id/btnLog"
+                style="@style/actionButtonStyle"
+                android:background="@color/rightSideButtons"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                android:textSize="28dp"
+                android:textAllCaps="false"
+                android:text="log" />
+            <Button
+                android:id="@+id/btnln"
+                style="@style/actionButtonStyle"
+                android:background="@color/rightSideButtons"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                android:textSize="28dp"
+                android:textAllCaps="false"
+                android:text="ln" />
+            <Button
+                android:id="@+id/btnSqrt"
+                style="@style/actionButtonStyle"
+                android:background="@color/rightSideButtons"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                android:text="\u221A" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:outlineAmbientShadowColor="@color/rightSideButtons"
+            android:outlineSpotShadowColor="@color/rightSideButtons"
+            android:background="@color/rightSideButtons">
+
+            <Button
+                android:id="@+id/btnPercentage"
+                style="@style/actionButtonStyle"
+                android:background="@color/rightSideButtons"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                android:text="%" />
             <Button
                 android:id="@+id/btnOpeningBracket"
                 style="@style/actionButtonStyle"
+                android:background="@color/rightSideButtons"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
                 android:text="(" />
             <Button
                 android:id="@+id/btnClosingBracket"
                 style="@style/actionButtonStyle"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                android:background="@color/rightSideButtons"
+
                 android:text=")" />
             <Button
-                android:id="@+id/btnDivide"
+                android:id="@+id/btnPow"
                 style="@style/actionButtonStyle"
-                android:textSize="30dp"
-                android:text="/" />
-        </LinearLayout>
+                android:background="@color/rightSideButtons"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                android:text="^" />
+            <Button
+                android:id="@+id/btnFact"
+                style="@style/actionButtonStyle"
+                android:background="@color/rightSideButtons"
+                android:outlineAmbientShadowColor="@color/rightSideButtons"
+                android:outlineSpotShadowColor="@color/rightSideButtons"
+                android:text="!" />
 
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,9 +216,18 @@
 
                 android:text="9" />
             <Button
-                android:id="@+id/btnMultiply"
+                android:id="@+id/btnDivide"
                 style="@style/actionButtonStyle"
-                android:text="*" />
+                android:textSize="30dp"
+                android:text="/" />
+
+            <ImageView
+                android:id="@+id/btnBack"
+                style="@style/numberButtonStyle"
+                android:src="@drawable/ic_backspace_key_1594211677"
+                android:hapticFeedbackEnabled="true"
+                android:scaleType="center">
+            </ImageView>
 
         </LinearLayout>
 
@@ -109,9 +251,16 @@
                 style="@style/numberButtonStyle"
                 android:text="6" />
             <Button
-                android:id="@+id/btnAdd"
+                android:id="@+id/btnMultiply"
                 style="@style/actionButtonStyle"
-                android:text="+" />
+                android:text="*" />
+
+
+            <Button
+                android:id="@+id/btnClear"
+                style="@style/actionButtonStyle"
+                android:hapticFeedbackEnabled="true"
+                android:text="AC" />
 
         </LinearLayout>
 
@@ -136,10 +285,15 @@
                 style="@style/numberButtonStyle"
 
                 android:text="3" />
+
             <Button
                 android:id="@+id/btnMinus"
                 style="@style/actionButtonStyle"
                 android:text="-" />
+            <Button
+                style="@style/actionButtonStyle"
+                android:clickable="false"
+                />
 
         </LinearLayout>
 
@@ -160,13 +314,16 @@
                 style="@style/numberButtonStyle"
 
                 android:text="0" />
-            <ImageView
-                android:id="@+id/btnBack"
-                style="@style/numberButtonStyle"
-                android:src="@drawable/ic_backspace_key_1594211677"
-                android:hapticFeedbackEnabled="true"
-                android:scaleType="center">
-            </ImageView>
+
+            <Button
+                style="@style/actionButtonStyle"
+                android:clickable="false"/>
+
+            <Button
+                android:id="@+id/btnAdd"
+                style="@style/actionButtonStyle"
+                android:text="+" />
+
 
             <Button
                 android:id="@+id/btnEquals"
