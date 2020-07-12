@@ -37,8 +37,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button tvSub;
     private Button tvMul;
     private Button tvDiv;
-    private Button tvExp;
+    private Button tvPow;
+    private Button tvFactorial;
     private Button tvPercentage;
+    private Button tvSqrt;
 
     private Button tvOpenBracket;
     private Button tvCloseBracket;
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button tvTan;
     private Button tvLog;
     private Button tvLn;
+    private Button tvExp;
 
 
     StringBuilder expressionString = new StringBuilder();
@@ -96,6 +99,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.tvAdd = (Button) findViewById(R.id.btnAdd);
         this.tvSub = (Button) findViewById(R.id.btnMinus);
         this.tvDiv = (Button) findViewById(R.id.btnDivide);
+        this.tvPercentage = (Button) findViewById(R.id.btnPercentage);
+        this.tvFactorial = (Button) findViewById(R.id.btnFact);
+        this.tvPow = (Button) findViewById(R.id.btnPow);
+        this.tvSqrt = (Button) findViewById(R.id.btnSqrt);
+
+
         this.tvClear=(Button) findViewById(R.id.btnClear);
 
         this.tvOpenBracket =    (Button) findViewById(R.id.btnOpeningBracket);
@@ -125,6 +134,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.tvMul.setOnClickListener(this);
         this.tvDiv.setOnClickListener(this);
         this.tvDot.setOnClickListener(this);
+        this.tvSqrt.setOnClickListener(this);
+        this.tvPow.setOnClickListener(this);
+        this.tvPercentage.setOnClickListener(this);
+        this.tvFactorial.setOnClickListener(this);
 
         this.tvOpenBracket.setOnClickListener(this);
         this.tvCloseBracket.setOnClickListener(this);
@@ -136,19 +149,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
        // tvBack.setOnLongClickListener();
 
 
-
-
-
-
-
-
     }
+
+
+
+
 
     @Override
     public void onClick(final View view)
     {
         switch (view.getId())
         {
+            //------------------------------------------------------cases for numbers-------------------------------------------------------------------//
             case R.id.btnZero:
                 tv0.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 insertNumber("0");
@@ -194,7 +206,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tvDot.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 insertDot(".");
                 break;
+                //----------------------------------------------------------------------------------------------------------------------------------------//
 
+
+
+
+            //--------------------------------------------------------cases for operators----------------------------------------------------------------//
             case R.id.btnAdd:
                 tvAdd.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 insertSign("+");
@@ -211,22 +228,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tvDiv.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 insertSign("/");
                 break;
+            case R.id.btnPercentage:
+                tvPercentage.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                insertSign("%");
+                break;
+            case R.id.btnFact:
+                tvFactorial.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                insertSign("!");
+                break;
+            case R.id.btnPow:
+                tvPow.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                insertSign("^");
+                break;
+            case R.id.btnSqrt:
+                tvSqrt.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                allowOperatorUse = true;        // square roots much like - can be used in the beginning as well
+                insertSign("sqrt");
+                break;
+        //--------------------------------------------------------------------------------------------------------------------------------------//
+
+
+            case R.id.btnOpeningBracket:
+                tvOpenBracket.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                insertBrackets("(");
+                break;
+
+            case R.id.btnClosingBracket:
+                tvCloseBracket.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                insertBrackets(")");
+                break;
         }
-
-
-
-
 
     }
 
     public void insertDot(String text)
     {
 
-        if(allowOperatorUse) {                              //can only add . after there is a number;
+        {                              //can only add . after there is a number;
             boolean hasDigitPreceding = Character.isDigit(expressionString.charAt(expressionString.length() - 1));
-            if (hasDigitPreceding  && maxDotAllowed==1) {
-                expressionString.append(".");
-                allowOperatorUse = false;                         //disallow the use of operator after .
+            if ( (expressionString.length()==0  hasDigitPreceding  && maxDotAllowed==1) {
+                expressionString.append(text);
+                allowOperatorUse = false;                         //disallow the use of operators after .
                 maxDotAllowed++;
             }
         }
@@ -238,11 +280,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void insertNumber(String text)
     {
 
-        allowOperatorUse = true;
+        allowOperatorUse = true;                        //this is to not allow operators except - in the beginning or  dots
+        allowCloseBracketUse = true;                    // this is to not allow brackets to be closed like ()
         expressionString.append(text);
         tvExpression.setText(expressionString);
-        System.out.println("the length of the expression string is " + expressionString.length());
-
     }
 
 
@@ -258,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case "+":
                 if(allowOperatorUse)
                 {
-                    if(expressionString.charAt(expressionString.length()-1)=='-' || expressionString.charAt(expressionString.length()-1)=='*' || expressionString.charAt(expressionString.length()-1)=='/')
+                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)) )
                     {
 
                     }else {
@@ -270,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case "*":
                 if(allowOperatorUse)
                 {
-                    if(expressionString.charAt(expressionString.length()-1)=='-' || expressionString.charAt(expressionString.length()-1)=='+' || expressionString.charAt(expressionString.length()-1)=='/')
+                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)))
                     {
 
                     }else {
@@ -284,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if(allowOperatorUse)
                 {
-                    if(expressionString.charAt(expressionString.length()-1)=='-' || expressionString.charAt(expressionString.length()-1)=='+' || expressionString.charAt(expressionString.length()-1)=='*')
+                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)))
                     {
 
                     }else {
@@ -293,8 +334,67 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
 
+            case "^":
+
+                if(allowOperatorUse)
+                {
+                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)))
+                    {
+
+                    }else {
+                        expressionString.append("^");
+                    }
+                }
+                break;
+
+            case "%":
+
+                if(allowOperatorUse)
+                {
+                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)))
+                    {
+
+                    }else {
+                        expressionString.append("%");
+                        allowOperatorUse = true;         // as x% + y or x% / y is valid
+                    }
+                }
+                break;
+
+            case "!":
+
+                if(allowOperatorUse)
+                {
+                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)))
+                    {
+
+                    }else {
+                        expressionString.append("!");
+                        allowOperatorUse = true;                 // as x! + y or x! / y is valid
+                    }
+                }
+                break;
+
+            case "sqrt":
+
+                if(allowOperatorUse)
+                {
+                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)))
+                    {
+
+                    }else {
+                        expressionString.append("\u221A");
+//                        expressionString.append("(");           // adds a bracket after square root for ease of understanding
+//                        afterBracketOpened();                   // makes sqrt() without text invalid. does not allow sqrt(* ....
+                        allowOperatorUse = false;
+                    }
+                }
+                break;
+
+
         }
         maxDotAllowed = 1;              // resetting the dot allowed
+        allowCloseBracketUse = false;       // to stop closing brackets like (x*/
         tvExpression.setText(expressionString);
 
     }
@@ -314,11 +414,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
 
             expressionString.append("(");           // for cases like x/-y  to make x/(-y Adding this bracket cause the backend does not give correct out for cases like x/-y(a+b)
+
+            bracketOpenedCount++;
+
             expressionString.append(text);
         }else {
             expressionString.append(text);
         }
     }
+
+
+    public void insertBrackets(String text)
+    {
+
+        switch (text)
+        {
+            case "(":
+                expressionString.append("(");
+                afterBracketOpened();       // setting operator use to false as (*x, (/x or even (+x are ambiguous
+                                            // an opening bracket will only allow close bracket use if there are numbers inside it. The numbers trigger allow close bracket use to true
+                break;
+
+            case ")":
+                if(bracketOpenedCount!=0 && allowCloseBracketUse)// you can only use close bracket if there is an open bracket and if there is a number and not a sign before
+                    {
+                        expressionString.append(")");
+                        bracketOpenedCount--;
+                    }
+                else{
+
+                }
+                break;
+        }
+
+        tvExpression.setText(expressionString);
+
+
+
+
+    }
+
+    public void afterBracketOpened()                // to not allow signs except minus, not allow closing brackets without numbers and increasting the bracket opened count
+    {
+        bracketOpenedCount++;
+        allowCloseBracketUse = false;
+        allowOperatorUse = false;
+
+    }
+
 
 
 
