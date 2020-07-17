@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Evaluator {
 
-    static String evaluate(StringBuilder expression, Boolean isRad) throws Exception
+    public static String evaluate(StringBuilder expression, Boolean isRad) throws Exception
     {
         try {
             List<String> expressionList = new ArrayList<> ();
