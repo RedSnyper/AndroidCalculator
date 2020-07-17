@@ -2,88 +2,206 @@ package com.zeebs.calculator.calculation;
 
 
 
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Stack;
 
-public class Calculate {
+public class Calculate{
 
-    public static String result(List<String> infixToPostfix) throws ArithmeticException, EmptyStackException
+    static Stack<String> operand = new Stack<> ();
+
+    public static String result(List<String> infixToPostfix, boolean isRad) throws EmptyStackException, BadExpressionException
     {
-        Stack<Double> operand = new Stack<>();
-        double operand1;
-        double operand2;
-        double res;
-        Double result;
-        String stringResult;
-
+        double res;     // for storing all the results.
         try {
-            for (int i = 0; i < infixToPostfix.size(); i++) {
+            for (int i = 0; i < infixToPostfix.size (); i++) {
 
 
-                String getCurrentValue = (String) infixToPostfix.get(i);
+                String getCurrentValue = infixToPostfix.get (i);
 
-                if (getCurrentValue.matches("-?\\d+|-?\\d+\\.\\d+"))  // for all numbers : negative or positive
+                switch (getCurrentValue)
                 {
-                    operand.push(Double.parseDouble(getCurrentValue));
-                } else if (getCurrentValue.equals("+")) {
-                    operand2 = operand.pop();
-                    operand1 = operand.pop();
-                    res = operand1 + operand2;
-                    operand.push(res);
+                    case "+":
+                        res = arithmeticCalc ("+");
+                        operand.push (Double.toString (res));
+                        break;
+                    case "-":
+                        res = arithmeticCalc ("-");
+                        operand.push (Double.toString (res));
+                        break;
+                    case "*":
+                        res = arithmeticCalc ("*");
+                        operand.push (Double.toString (res));
+                        break;
+                    case "/":
+                        res = arithmeticCalc ("/");
+                        operand.push (Double.toString (res));
+                        break;
+                    case "^":
+                        res = arithmeticCalc ("^");
+                        operand.push (Double.toString (res));
+                        break;
+                    case "!":
+                        BigInteger factorial = factorial (Integer.parseInt(operand.pop()));
+                        operand.push(factorial.toString());
+                        break;
+                    case "$":
+                        String number = operand.pop ();
+                        String expression = operand.pop ();
+                        res = functionCalc (expression, number, isRad);
+                        try {
+                            if ( res == Double.POSITIVE_INFINITY || res == Double.NEGATIVE_INFINITY )
+                                throw new FunctionException ("Domain error");
+                        }catch(FunctionException e)
+                        {
+                            return e.getMessage ();
+                        }
+                        operand.push (Double.toString (res));
+                        break;
 
-                } else if (getCurrentValue.equals("-")) {
 
-                    operand2 = operand.pop();
-                    operand1 = operand.pop();
-                    res = operand1 - operand2;
-                    operand.push(res);
-
-                } else if (getCurrentValue.equals("*")) {
-                    operand2 = operand.pop();
-                    operand1 = operand.pop();
-                    res = operand1 * operand2;
-                    operand.push(res);
-
-                } else if (getCurrentValue.equals("/")) {
-                    operand2 = operand.pop();
-                    operand1 = operand.pop();
-                    res = operand1 / operand2;
-                    operand.push(res);
+                    case "\u221a":
+                        res = Double.parseDouble (operand.pop ());
+                        res = Math.sqrt (res);
+                        operand.push (Double.toString (res));
+                        break;
+                    case "(":
+                        // added this just to give instantaneous result in the app without throwing errors.
+                        break;
+                    default:
+                        operand.push (getCurrentValue);
+                        break;
                 }
 
             }
-        }catch (ArithmeticException e)
+            return  operand.pop ();
+        }catch (EmptyStackException e) {
+
+            throw new BadExpressionException ("Bad Expression");
+
+        }catch (FactorialException e)
         {
-            return "Cant divde by zero";
-        }catch (EmptyStackException e)
-        {
-
-            return "";
-        }
-        result = operand.pop();
-
-        if(result%1==0)
-        {
-            Integer val = result.intValue();
-
-            if(val>=Integer.MAX_VALUE)
-            {
-                stringResult = Double.toString(result);
-
-            }else
-            stringResult = Integer.toString(val);
-        }
-        else {
-
-            stringResult = Double.toString(result);
+            return e.getMessage ();
         }
 
-        DecimalFormat df = new DecimalFormat("###,###.#######");
-        stringResult = df.format(Double.parseDouble(stringResult));
+    }
 
-        return stringResult;
+
+
+    private  static double arithmeticCalc(String sign) throws BadExpressionException  {
+        try {
+            double operand1 = Double.parseDouble (operand.pop ());
+            double operand2 = Double.parseDouble (operand.pop ());
+            double res = 0.0;
+
+            switch (sign) {
+                case "+":
+                    res = operand2 + operand1;
+                    break;
+                case "-":
+                    res = operand2 - operand1;
+                    break;
+                case "*":
+                    res = operand2 * operand1;
+                    break;
+                case "/":
+                    res = operand2 / operand1;
+                    break;
+                case "^":
+                    res = Math.pow (operand2, operand1);
+                    break;
+            }
+            return res;
+        }catch (NumberFormatException | EmptyStackException e) {
+            throw new BadExpressionException ("Bad Expression");
+        }
+    }
+
+
+    private static double functionCalc(String function, String operand, boolean isRad){
+
+        double res = 0.0;
+        double value =  Double.parseDouble (operand);
+
+        if ( function.equals ("log") || function.equals ("ln") ) {
+
+            if ( function.equals ("log") ) {
+                res = Math.log10 (value);
+            }
+            else {
+                res = Math.log (value);
+            }
+            return  res;
+        }
+        else if(function.equals ("asin") || function.equals ("acos") || function.equals ("atan")) {
+
+            switch (function) {
+                case "asin":
+                    res = Math.asin (value);
+                    break;
+
+                case "acos":
+                    res = Math.acos (value);
+                    break;
+
+                case "atan":
+                    res = Math.atan (value);
+                    break;
+            }
+
+            if ( !isRad )
+                res = Math.toDegrees (res);
+
+            return res;
+
+        }else{
+
+            if ( !isRad ) {
+                value = Math.toRadians (value);     //by default java works in radian. So if degree is given, change to radian first
+            }
+
+            DecimalFormat df = new DecimalFormat ("#.##########");    // to round off any precision error and to make degree calc accurate
+
+            switch (function) {
+                case "sin":
+                    res = Math.sin (value);
+                    break;
+
+                case "cos":
+                    res = Math.cos (value);
+                    break;
+
+                case "tan":
+                    if ( !isRad )
+                    {
+                        double sinValue = Math.sin (value);             // doing this to remove the issue of tan(90) not being undefined.
+                        double cosValue = Math.cos (value);
+                        sinValue = Double.parseDouble (df.format (sinValue));
+                        cosValue = Double.parseDouble (df.format (cosValue));          //cos(90) is not exact 0 but 6.xxxE-17
+                        res = sinValue / cosValue;
+                        break;
+                    }
+                    res = Math.tan (value);
+                    break;
+            }
+            return  res;
+        }
+
+    }
+
+    static BigInteger factorial(Integer value) throws FactorialException {
+        if ( value <= 1000 ) {
+            BigInteger fact = new BigInteger ("1");
+            for (int i = value; i >= 1; i--) {
+                fact = fact.multiply (BigInteger.valueOf (i));
+            }
+            return fact;
+        }else{
+
+            throw new FactorialException ("Factorial Limited Only to 1000");
+        }
     }
 }
 

@@ -2,6 +2,7 @@
 package com.zeebs.calculator;
 
 import com.zeebs.calculator.calculation.Calculate;
+import com.zeebs.calculator.calculation.Evaluator;
 import com.zeebs.calculator.calculation.ExpressionParser;
 import com.zeebs.calculator.calculation.ExpressionSplitter;
 import com.zeebs.calculator.calculation.InfixToPostfix;
@@ -354,10 +355,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-
-
-
     public void insertDot(String text)
     {
 
@@ -505,6 +502,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public void calculateResult(StringBuilder expression)
+    {
+        String result =
+    }
 
 
 
