@@ -21,6 +21,7 @@ public class Evaluator {
             result = Calculate.result (expressionList, isRad);
             value = Double.parseDouble (result);
             result = decimalFormat.format (value);
+            System.gc();
             return result;
 
 

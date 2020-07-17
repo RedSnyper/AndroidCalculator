@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int maxDotAllowed = 1;   // for cases like 5.5.5
     private int bracketOpenedCount = 0; // to display a toast if all open brackets are not closed
     private boolean showResult = false;
-
+    private StringBuilder result;
 
     private boolean dotFlag;            // to disallow for factorial
 
@@ -368,6 +368,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             //--------------------------------------------------------------------------------------------------------------------------------------//
 
+            case R.id.btnEquals:
+                tvEquals.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                onEqualsPressed(expressionString);
+                break;
 
             case R.id.btnClear:
                 tvClear.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
@@ -386,6 +390,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvResult.setText("");
         expressionString.setLength(0);
         maxDotAllowed = 1;
+        System.gc();
         //  showResult = false;
         // tvResult.setText("");
     }
@@ -417,12 +422,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void insertNumber(String text) {
 
+        String res;
         allowOperatorUse = true;                        //this is to not allow operators except - in the beginning or  dots
         allowCloseBracketUse = true;                    // this is to not allow brackets to be closed like ()
         expressionString.append(text);
         tvExpression.setText(expressionString);
-        tvResult.setText(calculateResult(expressionString));
-
+        res = calculateResult(expressionString);
+        tvResult.setText(res);
+        result = new StringBuilder(res);
     }
 
 
@@ -542,6 +549,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return e.getMessage();
         }
     }
+
+
+    public void onEqualsPressed(StringBuilder expressionString)
+    {
+        if (isExecutable(expressionString))
+        {
+            String res = tvResult.getText().toString();
+            resetAll();
+            tvExpression.setText(res);
+            allowOperatorUse = true;
+
+
+            if(res.matches("-?\\d+\\.\\d+"))    // if result is 6.7 there is already a dot.
+                maxDotAllowed++;
+
+            expressionString.append(res);
+        }
+    }
+
+        private boolean isExecutable(StringBuilder expression) {
+
+            if (expression == null) {
+                return false;
+            }
+            if (bracketOpenedCount != 0) {
+                Toast.makeText(this, "Not all brackets closed", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            char firstCharacter = expression.charAt(0);
+            char lastCharacter = expression.charAt(expression.length() - 1);
+
+            switch (firstCharacter) {
+                case '^':
+                case '+':
+                case '*':
+                case '!':
+                case '/':
+                case ')':
+                case '%':
+                    return false;
+            }
+            switch (lastCharacter) {
+                case '-':
+                case '+':
+                case '/':
+                case '*':
+                case '(':
+                case '^':
+                case '\u221a':
+                    return false;
+            }
+            return true;
+    }
+
 
 //    public void initalizeTextViews() {
 //
@@ -1012,31 +1074,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //
 //
 //
-//    public boolean checkExecutableExpressions(String expression) {
-//        if (expression.isEmpty()) {
-//            return false;
-//        } else {
-//            char firstCharacter = expression.charAt(0);
-//            char lastCharacter = expression.charAt(expression.length() - 1);
-//
-//            if (Character.isDigit(firstCharacter) && Character.isDigit(lastCharacter))
-//                return true;
-//            else if (firstCharacter == '(' && lastCharacter == ')')
-//                return  true;
-//            else if (Character.isDigit(firstCharacter) && lastCharacter == ')' )
-//                return true;
-//            else if (firstCharacter == '(' && Character.isDigit(lastCharacter) )
-//                return true;
-//            else if (firstCharacter == '-' && Character.isDigit(lastCharacter))
-//                return true;
-//            else if (firstCharacter == '-' && lastCharacter == ')')
-//                return true;
-//            else
-//                return false;
-//
-//
-//        }
-//    }
+
 //
 //    public boolean hasPrecedingCloseBracket(String expression)
 //    {
