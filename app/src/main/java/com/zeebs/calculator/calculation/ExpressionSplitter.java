@@ -28,6 +28,9 @@ public class ExpressionSplitter  //the returned split list is passed to Expressi
                 charAtCurrentPosition = expression.charAt (i);
 
 
+                if(charAtCurrentPosition==',') // removes all comma from the expression string;
+                    continue;
+
                 //--------------------------for figuring out negative number at the start or in the middle of expression--------------------------//
 
                 if (i == 0 && charAtCurrentPosition == '-')         //for negative cases in the beginning. Sets a flag negativeNumberAtStart = true
