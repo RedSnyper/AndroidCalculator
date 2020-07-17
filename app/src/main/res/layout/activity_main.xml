@@ -5,19 +5,25 @@
     android:background="@android:color/black">
 
 
-    <TextView
+
+
+    <EditText
         android:id="@+id/expression"
-        android:layout_width="match_parent"
-        android:layout_height="120sp"
-        android:textSize="60sp"
-        android:textColor="@android:color/white"
-        android:gravity="end"
-        android:scrollHorizontally="true"
-        android:inputType="number"
         android:ellipsize="start"
-        android:cursorVisible="true"
-        android:textCursorDrawable="@android:color/white"
-        android:singleLine="true"/>
+        android:gravity="end"
+        android:layout_width="match_parent"
+        android:layout_height="150sp"
+        android:textSize="60sp"
+        android:clickable="false"
+        android:focusable="false"
+        android:inputType="textNoSuggestions|number"
+        android:cursorVisible="false"
+        android:textColor="@android:color/white"
+        android:background="@android:color/black"
+        android:singleLine="true" />
+
+
+
 
 
     <TextView

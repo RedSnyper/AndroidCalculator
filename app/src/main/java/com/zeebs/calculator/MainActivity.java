@@ -11,9 +11,12 @@ import java.nio.charset.CharacterCodingException;
 import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button tvFactorial;
     private Button tvPercentage;
     private Button tvSqrt;
+    private Button tvPi;
 
     private Button tvOpenBracket;
     private Button tvCloseBracket;
@@ -66,15 +70,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean allowCloseBracketUse;
     private boolean allowSubtraction = true;       // for cases like -3 or (-3) in the beginning
     private boolean allowBracketOpenUse = true;
-    private TextView tvResult, tvExpression;
+    private TextView tvResult;
+    private EditText tvExpression;
     private ImageView tvBack;
     private int maxDotAllowed = 1;   // for cases like 5.5.5
     private int bracketOpenedCount = 0; // to display a toast if all open brackets are not closed
     private boolean showResult = false;
 
 
-
-
+    private boolean dotFlag;            // to disallow for factorial
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.tvFactorial = (Button) findViewById(R.id.btnFact);
         this.tvPow = (Button) findViewById(R.id.btnPow);
         this.tvSqrt = (Button) findViewById(R.id.btnSqrt);
+        this.tvPi = (Button) findViewById(R.id.btnPi);
+        this.tvExp = (Button) findViewById(R.id.btnExponent);
 
 
         this.tvClear=(Button) findViewById(R.id.btnClear);
@@ -114,8 +120,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.tvEquals =         (Button) findViewById(R.id.btnEquals);
 
 
-        this.tvExpression =     (TextView) findViewById(R.id.expression);
+        this.tvExpression =     (EditText) findViewById(R.id.expression);
         this.tvResult =         (TextView) findViewById(R.id.result);
+
+
+        this.tvSin = (Button) findViewById(R.id.btnSin);
+        this.tvCos = (Button) findViewById(R.id.btnCos);
+        this.tvTan = (Button) findViewById(R.id.btnTan);
+        this.tvLog = (Button) findViewById(R.id.btnLog);
+        this.tvLn = (Button) findViewById(R.id.btnln);
+
+
+
+
+        //---------------------------------------------------------------------------------------------------------------------------------------//
 
 
         this.tv0.setOnClickListener(this);
@@ -138,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.tvPow.setOnClickListener(this);
         this.tvPercentage.setOnClickListener(this);
         this.tvFactorial.setOnClickListener(this);
+        this.tvExp.setOnClickListener(this);
+        this.tvPi.setOnClickListener(this);
 
         this.tvOpenBracket.setOnClickListener(this);
         this.tvCloseBracket.setOnClickListener(this);
@@ -145,6 +165,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.tvClear.setOnClickListener(this);
         this.tvEquals.setOnClickListener(this);
 
+        this.tvSin.setOnClickListener(this);
+        this.tvCos.setOnClickListener(this);
+        this.tvTan.setOnClickListener(this);
+        this.tvLog.setOnClickListener(this);
+        this.tvLn.setOnClickListener(this);
 
        // tvBack.setOnLongClickListener();
 
@@ -202,6 +227,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 insertNumber("9");
                 break;
 
+            case R.id.btnExponent:
+                tvExp.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                insertNumber("e".toLowerCase());
+                break;
+
+            case R.id.btnPi:
+                tvPi.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                insertNumber("\u03c0".toLowerCase());
+                break;
+
             case R.id.btnDot:
                 tvDot.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 insertDot(".");
@@ -245,9 +280,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 allowOperatorUse = true;        // square roots much like - can be used in the beginning as well
                 insertSign("sqrt");
                 break;
-        //--------------------------------------------------------------------------------------------------------------------------------------//
+            //--------------------------------------------------------------------------------------------------------------------------------------//
 
 
+            //-------------------------------------------------------case for brackets--------------------------------------------------------------//
             case R.id.btnOpeningBracket:
                 tvOpenBracket.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 insertBrackets("(");
@@ -257,18 +293,80 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tvCloseBracket.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 insertBrackets(")");
                 break;
+
+             //-----------------------------------------------------------------------------------------------------------------------------------//
+
+            //------------------------------------------------------cases for trig fn--------------------------------------------------------------
+            //
+            case R.id.btnSin:
+                tvSin.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                insertTrigFunction("sin");
+                break;
+            case R.id.btnCos:
+                tvCos.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                insertTrigFunction("cos");
+                break;
+            case R.id.btnTan:
+                tvTan.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                insertTrigFunction("tan");
+                break;
+            case R.id.btnLog:
+                tvLog.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                insertTrigFunction("log");
+                break;
+            case R.id.btnln:
+                tvLn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                insertTrigFunction("ln");
+                break;
+
+
+
+            //--------------------------------------------------------------------------------------------------------------------------------------//
+
+            case R.id.btnClear:
+                tvClear.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                resetAll();
+
+
         }
 
     }
+
+    public void resetAll()
+    {
+        allowOperatorUse = false;
+        bracketOpenedCount = 0;
+        allowCloseBracketUse = false;
+        tvExpression.setText("");
+        expressionString.setLength(0);
+        maxDotAllowed = 1;
+      //  showResult = false;
+       // tvResult.setText("");
+    }
+
+    public void insertTrigFunction(String text)
+    {
+
+        expressionString.append(text+"(");
+        afterBracketOpened();
+        tvExpression.setText(expressionString);
+
+    }
+
+
+
+
+
 
     public void insertDot(String text)
     {
 
         {                              //can only add . after there is a number;
-            boolean hasDigitPreceding = Character.isDigit(expressionString.charAt(expressionString.length() - 1));
-            if ( (expressionString.length()==0  hasDigitPreceding  && maxDotAllowed==1) {
+//            boolean hasDigitPreceding = Character.isDigit(expressionString.charAt(expressionString.length() - 1));
+            if ( maxDotAllowed==1) {
                 expressionString.append(text);
-                allowOperatorUse = false;                         //disallow the use of operators after .
+                allowOperatorUse = false;           //disallow the use of operators after .
+                dotFlag = true;
                 maxDotAllowed++;
             }
         }
@@ -293,106 +391,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (text)
         {
             case "-":
-                insertNegativeSign("-");
+                insertNegativeSign(text);
                 break;
 
             case "+":
-                if(allowOperatorUse)
-                {
-                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)) )
-                    {
-
-                    }else {
-                        expressionString.append("+");
-                    }
-                }
-                break;
-
             case "*":
-                if(allowOperatorUse)
-                {
-                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)))
-                    {
-
-                    }else {
-                        expressionString.append("*");
-                    }
-                }
-                break;
-
-
             case "/":
-
-                if(allowOperatorUse)
-                {
-                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)))
-                    {
-
-                    }else {
-                        expressionString.append("/");
-                    }
-                }
-                break;
-
             case "^":
-
                 if(allowOperatorUse)
                 {
-                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)))
-                    {
 
-                    }else {
-                        expressionString.append("^");
-                    }
+                        expressionString.append(text);
+                        allowOperatorUse = false ;          // no repeating signs after these operators except for minus.
                 }
                 break;
 
             case "%":
-
                 if(allowOperatorUse)
                 {
-                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)))
-                    {
 
-                    }else {
-                        expressionString.append("%");
+                        expressionString.append(text);
                         allowOperatorUse = true;         // as x% + y or x% / y is valid
-                    }
                 }
                 break;
 
             case "!":
-
                 if(allowOperatorUse)
                 {
-                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)))
-                    {
-
-                    }else {
-                        expressionString.append("!");
+                    if(!dotFlag){
+                        expressionString.append(text);
                         allowOperatorUse = true;                 // as x! + y or x! / y is valid
+                    }else{
+                        Toast.makeText(this,"Factorial only for positive integers",Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
 
+
             case "sqrt":
-
-                if(allowOperatorUse)
-                {
-                    if(!Character.isDigit(expressionString.charAt(expressionString.length() - 1)))
-                    {
-
-                    }else {
-                        expressionString.append("\u221A");
-//                        expressionString.append("(");           // adds a bracket after square root for ease of understanding
-//                        afterBracketOpened();                   // makes sqrt() without text invalid. does not allow sqrt(* ....
-                        allowOperatorUse = false;
-                    }
-                }
+                expressionString.append("\u221A");
+                allowOperatorUse = false;
                 break;
 
 
         }
+
         maxDotAllowed = 1;              // resetting the dot allowed
         allowCloseBracketUse = false;       // to stop closing brackets like (x*/
         tvExpression.setText(expressionString);
@@ -408,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             expressionString.append(text);
         }else if(expressionString.charAt(expressionString.length()-1)=='-' || expressionString.charAt(expressionString.length()-1)=='.')
         {
-            // do nothing for cases like x - - x or x-. which are ambiguous
+            // do nothing for cases like x - - x or x.- which are ambiguous
         }
         else if (expressionString.charAt(expressionString.length()-1)=='/')
         {
@@ -442,7 +485,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         bracketOpenedCount--;
                     }
                 else{
-
+                    Toast.makeText(this,"No open brackets to close", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -933,19 +976,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        tvResult.setText("");
 //    }
 //
-//    public void resetAll()
-//    {
-//        allowOperatorUse = false;
-//        bracketOpenedCount = 0;
-//        multiplyFlag = false;
-//        divideFlag = false;
-//        tvExpression.setText("");
-//        allowCloseBracketUse = false;
-//        allowSubtraction = true;
-//        maxDotAllowed = 1;
-//        showResult = false;
-//        tvResult.setText("");
-//    }
+
 //
 //
 //

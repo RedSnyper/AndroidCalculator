@@ -3,7 +3,7 @@
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#ffffff</color>
-    <color name = "rightSideButtons">#151515</color>
+    <color name = "rightSideButtons">#101010</color>
     <color name="actionButton">#F2000000</color>
     <color name="numberActionButton">#000000</color>
 </resources>
