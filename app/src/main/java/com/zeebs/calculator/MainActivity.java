@@ -1,11 +1,10 @@
-
 package com.zeebs.calculator;
 
 import com.zeebs.calculator.calculation.Evaluator;
 
 
-
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
@@ -14,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -59,21 +59,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     StringBuilder expressionString = new StringBuilder();
 
 
-    private boolean multiplyFlag;           // to not have **
-    private boolean divideFlag;             // to not have //
+
     private boolean allowOperatorUse = false; //flag for first time use which forbids the first input to be operators
     private boolean allowCloseBracketUse;
-    private boolean allowSubtraction = true;       // for cases like -3 or (-3) in the beginning
-    private boolean allowBracketOpenUse = true;
     private boolean isRad = true;
-    private TextView tvResult;
+    private EditText tvResult;
     private EditText tvExpression;
     private ImageView tvBack;
     private int maxDotAllowed = 1;   // for cases like 5.5.5
     private int bracketOpenedCount = 0; // to display a toast if all open brackets are not closed
-    private boolean showResult = false;
-    private StringBuilder result;
-
     private boolean dotFlag;            // to disallow for factorial
 
     @Override
@@ -117,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         this.tvExpression = (EditText) findViewById(R.id.expression);
-        this.tvResult = (TextView) findViewById(R.id.result);
+        this.tvResult = (EditText) findViewById(R.id.result);
 
 
         this.tvSin = (Button) findViewById(R.id.btnSin);
@@ -176,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tvBack.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
                 resetAll();
-             return true;
+                return true;
             }
         });
 
@@ -295,7 +289,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnPercentage:
                 tvPercentage.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 insertSign("%");
-                tvResult.setText(calculateResult(expressionString));        // as percentage is number / 100 which is a number too
+                if (!tvExpression.getText().toString().isEmpty())
+                    tvResult.setText(calculateResult(expressionString));        // as percentage is number / 100 which is a number too
                 break;
             case R.id.btnFact:
                 tvFactorial.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
@@ -351,34 +346,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btnDEGRAD:
                 degRad.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                if(isRad) {
+
+                if (isRad) {
                     degRad.setText("DEG");
-                    Toast.makeText(this,"Changed To Degree",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Changed To Degree", Toast.LENGTH_SHORT).show();
                     isRad = false;
-                }
-                else
-                {
+                } else {
                     degRad.setText("RAD");
-                    Toast.makeText(this,"Changed To Radian",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Changed To Radian", Toast.LENGTH_SHORT).show();
                     isRad = true;
                 }
 
-                tvResult.setText(calculateResult(expressionString));
+                if (expressionString.length() != 0) {
+                    tvResult.setText(calculateResult(expressionString));
+                }
+
                 break;
 
             //--------------------------------------------------------------------------------------------------------------------------------------//
 
             case R.id.btnEquals:
                 tvEquals.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                onEqualsPressed(expressionString);
+                if (expressionString.length() != 0 && !tvResult.getText().toString().matches("\\w+[a-z]"))    // if its not empty
+                    onEqualsPressed(expressionString);
                 break;
 
             case R.id.btnClear:
                 tvClear.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 resetAll();
+                break;
 
-
+            case R.id.btnBack:
+                tvBack.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                backPressed();
+                break;
         }
+        //----------------------------------------------------------------------------------------------------------------------------------------//
+        tvExpression.setSelection(expressionString.length()); // to go with the flow
 
     }
 
@@ -391,8 +395,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         expressionString.setLength(0);
         maxDotAllowed = 1;
         System.gc();
-        //  showResult = false;
-        // tvResult.setText("");
+
     }
 
     public void insertTrigFunction(String text) {
@@ -426,10 +429,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         allowOperatorUse = true;                        //this is to not allow operators except - in the beginning or  dots
         allowCloseBracketUse = true;                    // this is to not allow brackets to be closed like ()
         expressionString.append(text);
+
+
         tvExpression.setText(expressionString);
         res = calculateResult(expressionString);
         tvResult.setText(res);
-        result = new StringBuilder(res);
+
     }
 
 
@@ -461,14 +466,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case "!":
                 if (allowOperatorUse) {
-                    if (!dotFlag) {
+
                         expressionString.append(text);
                         tvResult.setText(calculateResult(expressionString));
-
                         allowOperatorUse = true;                 // as x! + y or x! / y is valid
-                    } else {
-                        Toast.makeText(this, "Factorial only for positive integers", Toast.LENGTH_SHORT).show();
-                    }
                 }
                 break;
 
@@ -541,6 +542,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+        //-----------------------the calculation part--------------------------------------//
     public String calculateResult(StringBuilder expression) {
         try {
             String result = Evaluator.evaluate(expression, isRad);
@@ -549,59 +551,153 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return e.getMessage();
         }
     }
+//-----------------------------------------------------------------------------------//
 
-
-    public void onEqualsPressed(StringBuilder expressionString)
-    {
-        if (isExecutable(expressionString))
-        {
+    public void onEqualsPressed(StringBuilder expressionString) {
+        if (isExecutable(expressionString)) {
             String res = tvResult.getText().toString();
             resetAll();
+
             tvExpression.setText(res);
-            allowOperatorUse = true;
-
-
-            if(res.matches("-?\\d+\\.\\d+"))    // if result is 6.7 there is already a dot.
-                maxDotAllowed++;
-
             expressionString.append(res);
+            allowOperatorUse = true;
+                if (res.matches("-?\\d+\\.\\d+"))    // if result is 6.7 there is already a dot.
+                    maxDotAllowed++;
+
+        } else {
+            Toast.makeText(this, "Expression Error", Toast.LENGTH_SHORT).show();
         }
     }
 
-        private boolean isExecutable(StringBuilder expression) {
+    private boolean isExecutable(StringBuilder expression) {
 
-            if (expression == null) {
+        if (expression == null) {
+            return false;
+        }
+        if (bracketOpenedCount != 0) {
+            Toast.makeText(this, "Not all brackets closed", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        char firstCharacter = expression.charAt(0);
+        char lastCharacter = expression.charAt(expression.length() - 1);
+
+        switch (firstCharacter) {
+            case '^':
+            case '+':
+            case '*':
+            case '!':
+            case '/':
+            case ')':
+            case '%':
                 return false;
-            }
-            if (bracketOpenedCount != 0) {
-                Toast.makeText(this, "Not all brackets closed", Toast.LENGTH_SHORT).show();
+        }
+        switch (lastCharacter) {
+            case '-':
+            case '+':
+            case '/':
+            case '*':
+            case '(':
+            case '^':
+            case '\u221a':
                 return false;
-            }
+        }
+        return true;
+    }
 
-            char firstCharacter = expression.charAt(0);
-            char lastCharacter = expression.charAt(expression.length() - 1);
+    private void backPressed() {
 
-            switch (firstCharacter) {
-                case '^':
-                case '+':
-                case '*':
-                case '!':
-                case '/':
+        int charsToDelete = 1;          // default is 1 chars to delete but for cases like sin(, cos(, tan(, log( and ln( its more than 1
+        if (expressionString.length() != 0) {
+
+            char charAtCurrentLocation = expressionString.charAt(expressionString.length() - 1);
+            switch (charAtCurrentLocation) {
                 case ')':
-                case '%':
-                    return false;
-            }
-            switch (lastCharacter) {
-                case '-':
-                case '+':
-                case '/':
-                case '*':
+                    bracketOpenedCount++;
+                    break;
+                case '.':
+                    maxDotAllowed = 1;
+                    break;
                 case '(':
-                case '^':
-                case '\u221a':
-                    return false;
+                    bracketOpenedCount--;
+                    if (expressionString.length() == 1) {
+
+                        // do nothing. Only delete one character;
+
+                    } else if (Character.isDigit(expressionString.charAt(expressionString.length() - 2)) ||
+                            !Character.isLetter(expressionString.charAt(expressionString.length() - 2))) {
+
+                        allowOperatorUse = false;
+                        //Only delete one character.
+
+                    } else {
+                        int i = 2;
+                        char charAtPreviousLocations = expressionString.charAt(expressionString.length() - 2);
+                        System.out.println("the char at prev loc is " + charAtPreviousLocations);
+                        if (Character.isLetter(charAtPreviousLocations) && (charAtPreviousLocations != 'e' || charAtPreviousLocations != '\u03c0')) {
+
+                            while (Character.isLetter(charAtPreviousLocations)) // for cases like sin(, cos( , ln( ...
+                            {
+                                System.out.println(charAtPreviousLocations);
+                                charsToDelete++;
+                                i++;
+                                if (expressionString.length() - i >= 0) {
+                                    charAtPreviousLocations = expressionString.charAt(expressionString.length() - i);
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    break;
             }
-            return true;
+
+            String newExpression = expressionString.substring(0, expressionString.length() - charsToDelete);
+            tvExpression.setText(newExpression);
+            tvExpression.setSelection(newExpression.length());
+            if (tvExpression.getText().toString().isEmpty()) // for cases having only 1 character and on deletion of the character, the screen is empty
+            {
+                resetAll();
+                return;
+            }else {
+                expressionString.setLength(0);
+                expressionString = expressionString.append(newExpression);
+                if(Character.isDigit(expressionString.charAt(expressionString.length()-1)))
+                {
+                    String res = calculateResult(expressionString);
+                    tvResult.setText(res);
+                }else{
+                    tvResult.setText("");
+                }
+            }
+
+
+
+        } else {
+            Toast.makeText(this, "Nothing to clear", Toast.LENGTH_SHORT).show();
+            resetAll();
+        }
+// tvResult.setText("");
+//                System.out.println("value after removing " + expression);
+//                if (!expression.isEmpty()) {
+//                    if (expression.charAt(expression.length() - 1) == ')') {
+//                        bracketOpenedCount++;
+//                    } else if (expression.charAt(expression.length() - 1) == '(') {
+//                        bracketOpenedCount--;
+//                    } else if (expression.charAt(expression.length() - 1) == '.') {
+//                        maxDotAllowed = 1;
+//                    }
+//                    tvExpression.setText(expression.substring(0, expression.length() - 1));
+//                    if (tvExpression.getText().toString().isEmpty()) {
+//                        resetAll();
+//                    }
+//
+//                } else {
+//                    Toast.makeText(MainActivity.this, "Nothing to clear", Toast.LENGTH_SHORT).show();
+//                    resetAll();
+//                }
+
+
     }
 
 
@@ -1108,4 +1204,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    }
 
 
-    }
+}

@@ -87,7 +87,7 @@ public class ExpressionParser
                     expressionForComputer.add (valueAtCurrentLocation);
                     if ( i != expression.size () - 1 )                          // if not in the last
                     {
-                        if ( expression.get (i + 1).matches ("-?\\d+|-?\\d+\\.\\d+|-?[e]|-?[\u03c0]|\\w+[a-z]") || expression.get (i + 1).equals ("(") ) {
+                        if ( expression.get (i + 1).matches ("-?\\d+|-?\\d+\\.\\d+|-?[e]|-?[\u03c0]|\\w+[a-z]|[\u221a]") || expression.get (i + 1).equals ("(") ) {
                             expressionForComputer.add ("*");
                         }
                     }

@@ -12,13 +12,22 @@ public class Evaluator {
             List<String> expressionList = new ArrayList<> ();
             String result = "";
             Double value;
-            DecimalFormat decimalFormat = new DecimalFormat ("###,###.#########");
+            DecimalFormat decimalFormat;
+
 
 
             expressionList = ExpressionSplitter.splitExpression (expression);
             expressionList = ExpressionParser.expressionForComputer (expressionList);
             expressionList = InfixToPostfix.infixToPostfix (expressionList);
             result = Calculate.result (expressionList, isRad);
+
+            if(result.length()>=14)
+            {
+                decimalFormat = new DecimalFormat ("0.E00");
+            }else {
+                decimalFormat = new DecimalFormat("###,###.######");
+            }
+
             value = Double.parseDouble (result);
             result = decimalFormat.format (value);
             System.gc();
@@ -27,7 +36,6 @@ public class Evaluator {
 
         }catch (Exception e)
         {
-            System.out.println ("the error is " + e.getMessage ());
             return e.getMessage ();
         }
 

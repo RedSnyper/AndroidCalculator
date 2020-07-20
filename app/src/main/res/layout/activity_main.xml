@@ -13,7 +13,9 @@
         android:gravity="end"
         android:layout_width="match_parent"
         android:layout_height="150sp"
-        android:textSize="60sp"
+        android:textSize="40sp"
+        android:paddingTop="20dp"
+        android:scrollbars="vertical"
         android:clickable="false"
         android:focusable="false"
         android:inputType="textNoSuggestions|number"
@@ -26,14 +28,18 @@
 
 
 
-    <TextView
+    <EditText
         android:id="@+id/result"
         android:layout_width="match_parent"
         android:layout_height="80sp"
         android:textColor="@android:color/white"
         android:gravity="end"
         android:textSize="30sp"
-
+        android:clickable="false"
+        android:focusable="false"
+        android:cursorVisible="false"
+        android:background="@android:color/black"
+        android:inputType="textNoSuggestions|number"
         android:ellipsize="end"
         android:singleLine="true"/>
 

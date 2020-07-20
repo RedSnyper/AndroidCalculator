@@ -74,7 +74,8 @@ public class ExpressionSplitter  //the returned split list is passed to Expressi
                 //---------------------------------------------------Handling expressions(numbers or letters)----------------------------------------------------//
 
 
-                if (Character.isLetter (charAtCurrentPosition)) {
+                if (Character.isLetter (charAtCurrentPosition) && charAtCurrentPosition!='E') // E added for E notation
+                {
                     if (!negativeNumberAtMid && !negativeNumberAtStart) // case for all positive letter expressions like e, pi, sin, tan....
 
                     {
@@ -108,11 +109,11 @@ public class ExpressionSplitter  //the returned split list is passed to Expressi
                 }
 
 
-                else if (Character.isDigit (charAtCurrentPosition) || charAtCurrentPosition == '.') // for numbers having one or more digits and decimal numbers
+                else if (Character.isDigit (charAtCurrentPosition) || charAtCurrentPosition == '.' || charAtCurrentPosition=='E') // for numbers having one or more digits and decimal numbers
                 {
                     expressionAppend.append (charAtCurrentPosition);
                     if (i != expression.length () - 1) {
-                        if (Character.isLetter(expression.charAt (i+1)))            // splits expression like 6e to 6, e
+                        if (Character.isLetter(expression.charAt (i+1)) && expression.charAt (i+1)!='E')            // splits expression like 6e to 6, e but does not for 1E10
                         {
                             splitExpression.add(expressionAppend.toString ());
                             expressionAppend.setLength (0);
