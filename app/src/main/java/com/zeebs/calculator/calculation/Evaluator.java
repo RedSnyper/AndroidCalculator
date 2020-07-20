@@ -12,7 +12,7 @@ public class Evaluator {
             List<String> expressionList = new ArrayList<> ();
             String result = "";
             Double value;
-            DecimalFormat decimalFormat;
+            DecimalFormat decimalFormat = new DecimalFormat("###,###.##########");
 
 
 
@@ -20,16 +20,15 @@ public class Evaluator {
             expressionList = ExpressionParser.expressionForComputer (expressionList);
             expressionList = InfixToPostfix.infixToPostfix (expressionList);
             result = Calculate.result (expressionList, isRad);
-
-            if(result.length()>=14)
-            {
-                decimalFormat = new DecimalFormat ("0.E00");
-            }else {
-                decimalFormat = new DecimalFormat("###,###.######");
-            }
-
             value = Double.parseDouble (result);
             result = decimalFormat.format (value);
+            if(result.length()>=20)
+            {
+                decimalFormat = new DecimalFormat ("0.E00");
+                result = decimalFormat.format (value);
+            }
+
+
             System.gc();
             return result;
 

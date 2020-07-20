@@ -51,7 +51,7 @@ public class ExpressionParser
 
                     expressionForComputer.add (valueAtCurrentLocation);
 
-                    if ( expression.get (i + 1).equals ("(") || expression.get (i + 1).matches ("\\d+(\\d+\\.\\d+)?|-?[e]|-?[\u03c0]|-?\\w+[a-z]|") ) {
+                    if ( expression.get (i + 1).equals ("(") || expression.get (i + 1).matches ("\\d+(\\d+\\.\\d+)?|-?[e]|-?[\u03c0]|-?\\w+[a-z]|[\u221a]") ) {
                         expressionForComputer.add ("*");
                     }
                     continue;
@@ -87,7 +87,7 @@ public class ExpressionParser
                     expressionForComputer.add (valueAtCurrentLocation);
                     if ( i != expression.size () - 1 )                          // if not in the last
                     {
-                        if ( expression.get (i + 1).matches ("-?\\d+|-?\\d+\\.\\d+|-?[e]|-?[\u03c0]|\\w+[a-z]|[\u221a]") || expression.get (i + 1).equals ("(") ) {
+                        if ( expression.get (i + 1).matches ("-?\\d+|-?\\d+\\.\\d+|-?[e]|-?[\u03c0]|\\w+[a-z]|[\u221a]|[(]")) {
                             expressionForComputer.add ("*");
                         }
                     }
@@ -99,7 +99,13 @@ public class ExpressionParser
                 else if ( valueAtCurrentLocation.equals ("%") ) {
                     expressionForComputer.add ("/");
                     expressionForComputer.add ("100");
+                    if(i!=expression.size ()-1) //not in last
+                    {
+                        if(expression.get (i+1).matches ("-?\\d+|-?\\d+\\.\\d+|\\.\\d+|-?[e]|-?[\u03c0]|\\w+[a-z]|[!]|[\u221a]|[(]"))
+                            expressionForComputer.add ("*");
+                    }
                 }
+
 
 
                 // cases for trig and log fn
@@ -153,6 +159,7 @@ public class ExpressionParser
                     expressionForComputer.add (valueAtCurrentLocation);
                 }
             }
+            System.out.println (expressionForComputer.toString ());
             return expressionForComputer;
         }catch (Exception e)
         {

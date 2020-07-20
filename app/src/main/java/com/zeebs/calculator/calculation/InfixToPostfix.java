@@ -48,7 +48,6 @@ public class InfixToPostfix {
 
                 if ( value.matches ("-?\\d+|-?\\d+\\.\\d+|\\w+[a-z]|-?\\.\\d+|-?\\d+\\.[E]\\d+") ) //matches positive numbers or -x.... or 1E10
                 {
-                    System.out.println("matched at " + value);
                     infixToPostfix.add (value);
                 }
                 else if ( value.equals ("(") ) {
