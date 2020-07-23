@@ -12,7 +12,7 @@ public class Evaluator {
             List<String> expressionList = new ArrayList<> ();
             String result = "";
             Double value;
-            DecimalFormat decimalFormat = new DecimalFormat("###,###.##########");
+            DecimalFormat decimalFormat = new DecimalFormat("###,###.#######");
 
 
 

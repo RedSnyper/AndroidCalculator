@@ -367,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btnEquals:
                 tvEquals.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                if (expressionString.length() != 0 && !tvResult.getText().toString().matches("\\w+[a-z]"))    // if its not empty
+                if (expressionString.length() != 0 && !tvResult.getText().toString().matches("\\w+[a-z]") && !tvResult.getText().toString().isEmpty())    // if its not empty
                     onEqualsPressed(expressionString);
                 break;
 
@@ -524,6 +524,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     expressionString.append(")");
                     bracketOpenedCount--;
                 } else {
+                    if(bracketOpenedCount==0)
+                        Toast.makeText(this, "Insert number first", Toast.LENGTH_SHORT).show();
+                    else
                     Toast.makeText(this, "No open brackets to close", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -574,10 +577,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (expression == null) {
             return false;
         }
-        if (bracketOpenedCount != 0) {
-            Toast.makeText(this, "Not all brackets closed", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        if (bracketOpenedCount != 0) {                            // experimental. Disabled to allow users to press equals without caring about brackets closed
+//            Toast.makeText(this, "Not all brackets closed", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
 
         char firstCharacter = expression.charAt(0);
         char lastCharacter = expression.charAt(expression.length() - 1);
@@ -613,6 +616,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             char charAtCurrentLocation = expressionString.charAt(expressionString.length() - 1);
             switch (charAtCurrentLocation) {
                 case ')':
+                    tvResult.setText(calculateResult(expressionString));
                     bracketOpenedCount++;
                     break;
                 case '.':

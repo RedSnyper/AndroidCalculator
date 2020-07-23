@@ -159,7 +159,6 @@ public class ExpressionParser
                     expressionForComputer.add (valueAtCurrentLocation);
                 }
             }
-            System.out.println (expressionForComputer.toString ());
             return expressionForComputer;
         }catch (Exception e)
         {
