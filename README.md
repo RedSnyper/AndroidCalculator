@@ -28,7 +28,7 @@ into computer readable format. This includes
 
         - adding '*' in expressions like 4(5), (5)4, (-(4)) to make it 4*(5), (5)*4, (-1*(4)) respecitvely.
 
-        - adding a new operator '$' in case of trig and log fns like sin(30) is converted to sin#(30).
+        - adding a new operator '$' in case of trig and log fns like sin(30) is converted to sin$(30).
 
 The computer readable expression is stored in a new arraylist and is passed to another class. 
 
