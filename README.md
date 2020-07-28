@@ -35,8 +35,8 @@ The computer readable expression is stored in a new arraylist and is passed to a
 -The parsed expression is passed to InfixToPostfix class which follows **infix to postfix** algorithm
 to convert infix expression to postfix . 
 
-            Precedence of operator(in descending order) is as 
-            - $, !, sqrt, ^, (/,*), (+,-)  (operators under brackets have the same precedence). 
+        Precedence of operator(in descending order) is as 
+        - $, !, sqrt, ^, (/,*), (+,-)  (operators under brackets have the same precedence). 
             
 The postfix notation is stored in stack which is passed onto Calculate class 
 
