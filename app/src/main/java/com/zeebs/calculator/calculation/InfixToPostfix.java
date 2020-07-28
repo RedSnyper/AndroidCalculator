@@ -90,6 +90,12 @@ public class InfixToPostfix {
             while (!operatorStack.isEmpty ()) {
                 infixToPostfix.add (operatorStack.pop ());
             }
+
+            {
+                operatorStack.clear();
+                expressionForComputer.clear();
+                System.gc();
+            }
             return infixToPostfix;
         }catch (EmptyStackException e)
         {

@@ -9,7 +9,7 @@ public class Evaluator {
     public static String evaluate(StringBuilder expression, Boolean isRad) throws Exception
     {
         try {
-            List<String> expressionList = new ArrayList<> ();
+            List<String> expressionList;
             String result = "";
             Double value;
             DecimalFormat decimalFormat = new DecimalFormat("###,###.#######");
@@ -28,8 +28,10 @@ public class Evaluator {
                 result = decimalFormat.format (value);
             }
 
-
-            System.gc();
+            {
+                expressionList.clear();
+                System.gc();
+            }
             return result;
 
 

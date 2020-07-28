@@ -8,7 +8,6 @@ public class ExpressionParser
         /*
             responsible for taking the split expression and parse it into computer readable format
                        e.g 4(20) is converted to 4*(20) and 4*-(20) to 4*-1*(20)
-
             Also converts (-?)e and (-?)pi to their respective values;
             all trig and log fn are added a new operator like sin,( is parsed to sin,#,(
             The # operator is given the highest precedence.
@@ -22,7 +21,7 @@ public class ExpressionParser
 
     public static List expressionForComputer ( List<String> expression ) throws Exception {
 
-        List<String> expressionForComputer = new ArrayList<> ();
+        List<String> expressionForComputer = new ArrayList<> (); //created a new array. Future update includes optimizing this in previous arraylist reference
         String valueAtCurrentLocation;
 
         try {
@@ -159,6 +158,13 @@ public class ExpressionParser
                     expressionForComputer.add (valueAtCurrentLocation);
                 }
             }
+
+
+            {
+                expression.clear();
+                System.gc();
+            }
+
             return expressionForComputer;
         }catch (Exception e)
         {

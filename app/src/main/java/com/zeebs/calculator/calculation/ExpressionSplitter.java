@@ -180,14 +180,8 @@ public class ExpressionSplitter  //the returned split list is passed to Expressi
             return splitExpression;
 
 
-
         } catch (Exception e) {
             throw new BadExpressionException ("Bad Expression");
-        } finally {
-
-            //was supposed to call splitExpression.clear() but apparently the return in try block would still not return from fn and call the splitExpression.clear()
-            // here to make arraylist null and return this null value.
-
         }
     }
 }
